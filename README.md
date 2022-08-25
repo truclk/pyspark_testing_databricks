@@ -8,12 +8,10 @@ I'm starting to use pyspark in databricks. I have some doubt about how it's work
 - When two jobs subscribe on one topic of Kakfa, will it have different offset or use the same offset.
 - kafka_processor.py is used for this test
 
-## Experimental:
 
+## Test 1:
 
-### Test 1:
-
-#### Condition
+### Condition
 
 - First run kafka_producer.py to produce message to topics.
 - Wait few minutes to generate enough data.
@@ -21,7 +19,7 @@ I'm starting to use pyspark in databricks. I have some doubt about how it's work
 - Stop and wait few minutes start it again, check for any data loss
 
 
-#### Results:
+### Results:
 
 - First message in Kafka 08.25.2022 10:19:07 (Local time UTC+7)
 - First even in table 2022-08-25 05:48:05.065728 (UTC)
@@ -29,26 +27,26 @@ I'm starting to use pyspark in databricks. I have some doubt about how it's work
 - Data after restart: 2022-08-25 06:10:36.54770
 
 
-#### Conclusion:
+### Conclusion:
 
 - It always use latest offset of the topics
 
 
-### Test 2:
+## Test 2:
 
-#### Condition
+### Condition
 
 - Doing test 1.
 - Start nodebook job with event_name metadata 
 - Checking it loss data or not
 
 
-#### Results:
+### Results:
 
 - First even in table of metadata `2022-08-25; 06:14:11.771; 2022-08-25; 06:14:06.877554; metadata; 2022-08-25`
 - There is event in metrics table `2022-08-25 06:14:11.737; 2022-08-25 06:14:06.877554; metrics; 2022-08-25`
 
-#### Conclusion:
+### Conclusion:
 
 - Subcriber of two topic is independent and we don't loss data for that.
 
@@ -57,14 +55,20 @@ I'm starting to use pyspark in databricks. I have some doubt about how it's work
 
 - We apply the group id and startingOffsets and do the same test of question 1
 
-### Test 1:
+`kafka_processor_with_group.py`
 
-#### Condition:
+- also test with checkpoint no working
+`kafka_processor_checkpoint.py`
+
+
+## Test 1:
+
+### Condition:
 
 - Run with startingOffsets `earliest`
 - Stop job, wait few minute and run it again.
 
-#### Result:
+### Result:
 
 - Data get from the first message from kafka. 2022-08-25 03:19:07.800933
 - Duplicated data inserted into table
@@ -74,20 +78,25 @@ I'm starting to use pyspark in databricks. I have some doubt about how it's work
 - Don't see consumer group id in Kafka UI see in consumers with both `group_databricks.processor.metrics` and `spark-kafka-source-72e83780-20af-4a4c-90f1-8ca3be57041b--1639682762-driver-0`
 
 
-#### Conclusion:
+### Conclusion:
 
 - This option might not work
 
-### Test 2:
+## Test 2:
 - Run with startingOffsets `latest`
 - Stop job, wait few minute and run it again.
 
-#### Result:
+### Result:
 - No duplication but data loss
 
-#### Conclusion:
+### Conclusion:
 
 The group doesn't commit any offset to kafka
 
 https://stackoverflow.com/questions/50844449/how-to-manually-set-group-id-and-commit-kafka-offsets-in-spark-structured-stream
 https://stackoverflow.com/questions/64003405/how-to-use-kafka-group-id-and-checkpoints-in-spark-3-0-structured-streaming-to-c/64003569#64003569
+
+# Question 3:
+- When we change structure of table will it works or not 
+
+`kafka_producer_change_structure.py`
