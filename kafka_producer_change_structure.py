@@ -144,6 +144,13 @@ def writeToTable(df, epochId):
                     "yyyy-MM-dd",
                 ),
             )
+            .withColumn(
+                "event_date_new_3",
+                date_format(
+                    to_timestamp(col("extraction_time"), "yyyy-MM-dd HH:mm:ss"),
+                    "yyyy-MM-dd",
+                ),
+            )
         )
 
         df = df_read.filter(f"event_name  = '{EVENT_NAME}'")
@@ -152,11 +159,14 @@ def writeToTable(df, epochId):
         select_cols.append("event_datetime")
         select_cols.append("event_date_new")
         select_cols.append("event_date_new_2")
+        select_cols.append("event_date_new_3")
 
         df = df.select(*select_cols)
         df.write.partitionBy("event_name", "event_date").format("parquet").mode(
             "append"
-        ).option("path", f"{S3_PREFIX}{EVENT_NAME}").saveAsTable(
+        ).option("overwriteSchema", "true").option(
+            "path", f"{S3_PREFIX}{EVENT_NAME}"
+        ).saveAsTable(
             f"truc_test_table_{EVENT_NAME}"
         )
 

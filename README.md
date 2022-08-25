@@ -105,3 +105,10 @@ https://stackoverflow.com/questions/64003405/how-to-use-kafka-group-id-and-check
 - No schema changing.
 - According this link we should update using DDL or DML or replace it by option overwriteSchema
 https://docs.databricks.com/delta/delta-batch.html#replace-table-schema
+
+
+# Question 4:
+- Automatically deploy from git
+
+## Test 1:
+- kafka_producer_change_structure ( cbc94921)
