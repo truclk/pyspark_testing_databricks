@@ -55,4 +55,28 @@ I'm starting to use pyspark in databricks. I have some doubt about how it's work
 
 # Question 2:
 
-- We apply the group id and earliest startingOffsets `earliest` and do the same test of question 1
+- We apply the group id and startingOffsets and do the same test of question 1
+
+### Test 1:
+
+#### Condition:
+
+- Run with startingOffsets `earliest`
+- Stop job, wait few minute and run it again.
+
+#### Result:
+
+- Data get from the first message from kafka. 2022-08-25 03:19:07.800933
+- Duplicated data inserted into table
+- Data when stopped 2022-08-25 06:52:50.065519 
+- Start again, got duplicated with for each time restart: `2022-08-25 06:55:11.515 2022-08-25 06:52:50.065519 metrics 2022-08-25`
+- `2022-08-25 06:52:56.402 2022-08-25 06:52:50.065519 metrics 2022-08-25`
+- Don't see consumer group id in Kafka UI
+
+#### Conclusion:
+
+- This option might not work
+
+### Test 2:
+- Run with startingOffsets `latest`
+- Stop job, wait few minute and run it again.

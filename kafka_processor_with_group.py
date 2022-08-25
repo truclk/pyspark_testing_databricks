@@ -153,7 +153,7 @@ df = (
         "value.deserializer",
         "org.apache.kafka.common.serialization.ByteArrayDeserializer",
     )
-    .option("startingOffsets", "earliest")
+    .option("startingOffsets", "latest")
     .option("kafka.group.id", f"databricks.processor.{EVENT_NAME}")
     .option("session.timeout.ms", "1000")
     .option("failOnDataLoss", "false")
