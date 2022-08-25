@@ -137,11 +137,22 @@ def writeToTable(df, epochId):
                     "yyyy-MM-dd",
                 ),
             )
+            .withColumn(
+                "event_date_new_2",
+                date_format(
+                    to_timestamp(col("extraction_time"), "yyyy-MM-dd HH:mm:ss"),
+                    "yyyy-MM-dd",
+                ),
+            )
         )
 
         df = df_read.filter(f"event_name  = '{EVENT_NAME}'")
         select_cols = col_names(event_name=EVENT_NAME)
         select_cols.append("event_date")
+        select_cols.append("event_datetime")
+        select_cols.append("event_date_new")
+        select_cols.append("event_date_new_2")
+
         df = df.select(*select_cols)
         df.write.partitionBy("event_name", "event_date").format("parquet").mode(
             "append"

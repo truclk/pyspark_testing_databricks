@@ -100,3 +100,8 @@ https://stackoverflow.com/questions/64003405/how-to-use-kafka-group-id-and-check
 - When we change structure of table will it works or not 
 
 `kafka_producer_change_structure.py`
+
+### Result:
+- No schema changing.
+- According this link we should update using DDL or DML or replace it by option overwriteSchema
+https://docs.databricks.com/delta/delta-batch.html#replace-table-schema
