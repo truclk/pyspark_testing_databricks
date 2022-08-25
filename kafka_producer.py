@@ -4,11 +4,16 @@ import time
 from datetime import datetime
 
 from nops_kafka import Producer
+from nops_kafka import ensure_topics
 
 bootstrap_servers = os.environ["KAFKA_BOOSTRAP_SERVERS"]
 topic_name = "testing.kafka.topic.databricks"
 
 producer = Producer(bootstrap_servers=bootstrap_servers)
+ensure_topics(
+    bootstrap_servers=bootstrap_servers, required_topics=[topic_name], num_partitions=1
+)
+
 while True:
     now_time = str(datetime.now())
     producer.send(
