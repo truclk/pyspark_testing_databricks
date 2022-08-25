@@ -71,7 +71,8 @@ I'm starting to use pyspark in databricks. I have some doubt about how it's work
 - Data when stopped 2022-08-25 06:52:50.065519 
 - Start again, got duplicated with for each time restart: `2022-08-25 06:55:11.515 2022-08-25 06:52:50.065519 metrics 2022-08-25`
 - `2022-08-25 06:52:56.402 2022-08-25 06:52:50.065519 metrics 2022-08-25`
-- Don't see consumer group id in Kafka UI
+- Don't see consumer group id in Kafka UI see in consumers with both `group_databricks.processor.metrics` and `spark-kafka-source-72e83780-20af-4a4c-90f1-8ca3be57041b--1639682762-driver-0`
+
 
 #### Conclusion:
 
@@ -80,3 +81,13 @@ I'm starting to use pyspark in databricks. I have some doubt about how it's work
 ### Test 2:
 - Run with startingOffsets `latest`
 - Stop job, wait few minute and run it again.
+
+#### Result:
+- No duplication but data loss
+
+#### Conclusion:
+
+The group doesn't commit any offset to kafka
+
+https://stackoverflow.com/questions/50844449/how-to-manually-set-group-id-and-commit-kafka-offsets-in-spark-structured-stream
+https://stackoverflow.com/questions/64003405/how-to-use-kafka-group-id-and-checkpoints-in-spark-3-0-structured-streaming-to-c/64003569#64003569
