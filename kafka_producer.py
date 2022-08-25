@@ -17,10 +17,14 @@ ensure_topics(
 while True:
     now_time = str(datetime.now())
     producer.send(
-        topic_name, value={"now_time": now_time}, headers={"event_name": "metrics"}
+        topic_name,
+        value={"now_time": now_time, "event_name": "metrics"},
+        headers={"event_name": "metrics"},
     )
     producer.send(
-        topic_name, value={"now_time": now_time}, headers={"event_name": "metadata"}
+        topic_name,
+        value={"now_time": now_time, "event_name": "metadata"},
+        headers={"event_name": "metadata"},
     )
     producer.flush()
     time.sleep(10)

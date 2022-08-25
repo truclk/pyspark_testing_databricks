@@ -118,8 +118,7 @@ def writeToTable(df, epochId):
             df.rdd.map(lambda x: process_message(x)), multiLine=True
         )  # noqa
         print(df_read.columns)
-        if "extraction_time" not in df_read.columns:
-            df_read = df_read.withColumn("extraction_time", current_timestamp())
+        df_read = df_read.withColumn("extraction_time", current_timestamp())
         df_read = df_read.withColumn(
             "event_datetime",
             to_timestamp(col("extraction_time"), "yyyy-MM-dd HH:mm:ss"),
@@ -160,7 +159,7 @@ df = (
 )
 query = (
     df.selectExpr("value", "headers")
-    .writeStream.trigger(processingTime="300 seconds")
+    .writeStream.trigger(processingTime="5 seconds")
     .foreachBatch(writeToTable)
     .start()
 )
